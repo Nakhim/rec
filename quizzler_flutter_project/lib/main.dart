@@ -25,6 +25,11 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<String> quesstion = [
+    'Flutter Develoment by Google',
+    'Windows buile by Microsoft'
+    'OS App develoment by Microsoft'
+  ];
   @override
   Widget build(BuildContext context) {
     return Column(
