@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:quizzler/questionStore.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 void main() => runApp(Quizzler());
-
+QuestionStore question =  QuestionStore();
 class Quizzler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -25,11 +26,48 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<String> quesstion = [
-    'Flutter Develoment by Google',
-    'Windows buile by Microsoft'
-    'OS App develoment by Microsoft'
-  ];
+  List<Icon> listIcon = [];
+  void _checkAnswer(bool answer){
+    setState(() {
+      if(!(question.getIndexOfQuestion() < listIcon.length)) {
+        if (answer == question.getCorrectAnswer()) {
+          print("get rigth answer ${question.getIndexOfQuestion()} ");
+          listIcon.add(Icon(Icons.check, color: Colors.green,));
+        } else {
+          listIcon.add(Icon(Icons.close, color: Colors.red,));
+          print("get not correct answer");
+        }
+        question.nextQuestion();
+      }else {
+        confim();
+      }
+    });
+  }
+
+  void confim(){
+     Alert(
+      context: context,
+      type: AlertType.error,
+      title: "Waning",
+      desc: "The Quiz is already Thank you ! check again ? .",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "OK",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: (){
+            setState(() {
+              listIcon = [];
+              question.setIndexOfQuestion(0);
+            });
+            Navigator.pop(context);
+          },
+          width: 120,
+        )
+      ],
+    ).show();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -42,7 +80,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                question.getQuestion(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -66,8 +104,8 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked true.
-              },
+                _checkAnswer(true);
+                },
             ),
           ),
         ),
@@ -84,12 +122,15 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked false.
-              },
+                _checkAnswer(false);
+                },
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        new Wrap(
+          direction: Axis.horizontal,
+          children: listIcon,
+        ),
       ],
     );
   }
