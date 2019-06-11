@@ -8,29 +8,11 @@ class InputPage extends StatefulWidget {
   @override
   _InputPageState createState() => _InputPageState();
 }
+enum Gender {male,female}
 
 class _InputPageState extends State<InputPage> {
-  var maleColor = inactiveCardColor;
-  var femaleColor = inactiveCardColor;
-  void _updateColor(String gender){
-    if(gender == "male"){
-      if(maleColor == inactiveCardColor){
-        maleColor = activeCardColor;
-        femaleColor= inactiveCardColor;
-      }else {
-        maleColor = inactiveCardColor;
-      }
-    }
-
-    if(gender == "female"){
-      if(femaleColor == inactiveCardColor){
-        femaleColor = activeCardColor;
-        maleColor= inactiveCardColor;
-      }else {
-        femaleColor = inactiveCardColor;
-      }
-    }
-  }
+  Gender selectedGender;
+  int hight = 180;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +22,7 @@ class _InputPageState extends State<InputPage> {
       ),
       body: new SafeArea(
          child: new Column(
+           crossAxisAlignment: CrossAxisAlignment.stretch,
            children: <Widget>[
              new Expanded(
                  child: new Row(
@@ -48,11 +31,13 @@ class _InputPageState extends State<InputPage> {
                        child: GestureDetector(
                          onTap: (){
                            setState(() {
-                              _updateColor("male");
+                             selectedGender = Gender.male;
                            });
                          },
                          child: new ReusableCard(
-                             color: maleColor,
+                             color: selectedGender == Gender.male
+                                 ? activeCardColor
+                                 : inactiveCardColor,
                              childCard: IconContan(icon: FontAwesomeIcons.mars,label: "MALE",),
                          ),
                        ),
@@ -61,11 +46,13 @@ class _InputPageState extends State<InputPage> {
                        child: GestureDetector(
                          onTap: (){
                            setState(() {
-                             _updateColor("female");
+                           selectedGender = Gender.female;
                            });
                          },
                          child: new ReusableCard(
-                           color: femaleColor,
+                           color: selectedGender == Gender.female
+                           ? activeCardColor
+                           : inactiveCardColor,
                            childCard: IconContan(
                              icon: FontAwesomeIcons.venus,
                              label: "FEMALE",
@@ -78,6 +65,51 @@ class _InputPageState extends State<InputPage> {
              Expanded(
                child: new ReusableCard(
                    color: Color(0xFF1D1E33),
+                 childCard: Column(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: <Widget>[
+                     Text("HIGHT",style: new TextStyle(
+                         color: Color(0xFF8D8E89),
+                         fontSize: 18.0
+                     ),),
+                     Row(
+                       mainAxisAlignment: MainAxisAlignment.center,
+                       crossAxisAlignment: CrossAxisAlignment.baseline,
+                       textBaseline: TextBaseline.alphabetic,
+                       children: <Widget>[
+                         Text(
+                           hight.toString(),
+                           style: new TextStyle(
+                             fontSize: 40.0,
+                               fontWeight: FontWeight.bold
+                           ),
+                         ),
+                         Text("cm",style: TextStyle(
+                           fontSize: 20.0,
+                           fontWeight: FontWeight.bold
+                         ),)
+                       ],
+                     ),
+                     SliderTheme(
+                       data: SliderTheme.of(context).copyWith(
+                         activeTrackColor: Colors.white,
+                         thumbColor: Color(0xFFEB1555),
+                         overlayColor: Color(0x29EB1555) ,
+                         thumbShape: RoundSliderThumbShape(),
+                       ),
+                       child: Slider(
+                           value: hight.toDouble(),
+                           max: 220.0,
+                           min: 120.0,
+                           onChanged:(value){
+                            setState(() {
+                              hight = value.round();
+                            });
+                           }
+                       ),
+                     )
+                   ],
+                 ),
 
                ),
              ),
