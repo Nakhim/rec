@@ -13,6 +13,8 @@ enum Gender {male,female}
 class _InputPageState extends State<InputPage> {
   Gender selectedGender;
   int hight = 180;
+  int weigth = 20;
+  int age = 18;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,6 +101,7 @@ class _InputPageState extends State<InputPage> {
                        ),
                        child: Slider(
                            value: hight.toDouble(),
+                           inactiveColor: Color(0xFF8D8E98),
                            max: 220.0,
                            min: 120.0,
                            onChanged:(value){
@@ -116,8 +119,86 @@ class _InputPageState extends State<InputPage> {
              new Expanded(
                  child: new Row(
                    children: <Widget>[
-                     Expanded(child: new ReusableCard(color: Color(0xFF1D1E33))),
-                     Expanded(child: new ReusableCard(color: Color(0xFF1D1E33))),
+                     Expanded(
+                         child: new ReusableCard(
+                             color: Color(0xFF1D1E33),
+                             childCard: new Column(
+                               mainAxisAlignment: MainAxisAlignment.center,
+                               children: <Widget>[
+                                 Text("WEIGHT",style:new TextStyle(
+                                     color: Color(0xFF8D8E89),
+                                     fontSize: 18.0
+                                 ) ),
+                                 Text(weigth.toString(),style: new TextStyle(
+                                     fontSize: 40.0,
+                                     fontWeight: FontWeight.bold
+                                 ),),
+                                 Row(
+                                   mainAxisAlignment: MainAxisAlignment.center,
+                                   children: <Widget>[
+                                     RoundIconButton(
+                                       icon : FontAwesomeIcons.minus,
+                                       onPress: (){
+                                       setState(() {
+                                         weigth --;
+                                       });
+                                       },
+                                     ),
+                                     SizedBox(width: 10.0,),
+                                     RoundIconButton(
+                                       icon : FontAwesomeIcons.plus,
+                                       onPress: (){
+                                       setState(() {
+                                         weigth ++;
+                                       });
+                                       },
+                                     ),
+                                   ],
+                                 )
+                               ],
+                             ),
+                         )
+                     ),
+                     Expanded(
+                         child: new ReusableCard(
+                           color: Color(0xFF1D1E33),
+                           childCard: new Column(
+                             mainAxisAlignment: MainAxisAlignment.center,
+                             children: <Widget>[
+                               Text("AGE", style: new TextStyle(
+                                   color: Color(0xFF8D8E89),
+                                   fontSize: 18.0
+                               )),
+                               Text(age.toString(), style: new TextStyle(
+                                   fontSize: 40.0,
+                                   fontWeight: FontWeight.bold
+                               ),),
+                               Row(
+                                 mainAxisAlignment: MainAxisAlignment.center,
+                                 children: <Widget>[
+                                   RoundIconButton(
+                                     icon: FontAwesomeIcons.minus,
+                                     onPress: () {
+                                       setState(() {
+                                         age --;
+                                       });
+                                     },
+                                   ),
+                                   SizedBox(width: 10.0,),
+                                   RoundIconButton(
+                                     icon: FontAwesomeIcons.plus,
+                                     onPress: () {
+                                       setState(() {
+                                         age ++;
+                                       });
+                                     },
+                                   ),
+                                 ],
+                               )
+                             ],
+                           ),
+                         )
+                     ),
                    ],
                  )
              ),
@@ -133,4 +214,28 @@ class _InputPageState extends State<InputPage> {
     );
   }
 }
+
+class RoundIconButton extends StatelessWidget {
+
+  RoundIconButton({@required this.icon, @required this.onPress});
+
+  final IconData icon;
+  final Function onPress ;
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+        onPressed: onPress,
+        elevation: 0.0,
+         child: Icon(icon),
+         constraints: BoxConstraints.tight(
+           Size.square(56.0),
+         ),
+      shape: CircleBorder(),
+      fillColor: Color(0xFF4C4F5E),
+        );
+  }
+
+}
+
 
